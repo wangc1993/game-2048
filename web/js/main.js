@@ -1,7 +1,15 @@
 // 新建一个二维坐标数组
 let board = new Array();
+// 冲突二维坐标，为了后期解决一次操作无限相加的bug
+let hasConflicted = new Array();
 // 获取外层容器（变化的）的宽度
 let gridContainerWidth = 0
+//当前得分
+let score = 0
+//游戏结束标识
+let gameoverFlag = false
+//最高分
+let maxHighScore = localStorage.getItem('maxHighScore') || 0
 
 $(function () {
     gridContainerWidth = $('#grid-container').width();
@@ -22,10 +30,12 @@ function init() {
     // i表示4乘4的格子中的行
     for (let i = 0; i < 4; i++) {
         board[i] = new Array();
+        hasConflicted[i] = new Array();
         // j表示4乘4的格子中的列
         for (let j = 0; j < 4; j++) {
             // 将每个格子的值初始化为0，0表示当前无数字
             board[i][j] = 0;
+            hasConflicted[i][j] = false;
             // 通过双重遍历获取每个格子元素
             let gridCell = $(`#grid-cell-${i}-${j}`);
             // 通过getPosTop()方法设置每个格子距顶端的距离
@@ -36,8 +46,14 @@ function init() {
     }
     // 初始化棋盘数字
     updateBoardView()
+    score = 0
+    updateScore(0);
+    updateMaxHighScore(maxHighScore)
+    gameoverFlag = false
+    $("#gameover").remove();
 }
 
+//初始化棋盘数字
 function updateBoardView() {
     //首先清空之前的数字格布局内容
     $(".number-cell").remove();
@@ -59,7 +75,9 @@ function updateBoardView() {
                 numberCell.css("color", getNumberColor(board[i][j]));
                 numberCell.text(board[i][j]);
             }
+            hasConflicted[i][j] = false;
         }
+
     }
 }
 
@@ -88,7 +106,11 @@ function generateOneNumber() {
 
     // 在随机位置显示随机数字
     board[randX][randY] = randNumber;
-
+    
     // 实现随机数字显示的动画
     showNumberWitnAnimation(randX, randY, randNumber);
+}
+
+function restartGame() {
+    newGame();
 }
