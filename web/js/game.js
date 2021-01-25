@@ -6,7 +6,6 @@ $(document).keydown(function (event) {
         if (moveLeft()) {
           setTimeout("generateOneNumber()", 210);
           setTimeout("isGameover()", 500);
-          gameOver();
         }
         break;
       case 38: //向上
