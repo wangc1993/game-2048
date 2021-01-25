@@ -1,4 +1,4 @@
-单机版 2048
+单机版 2048--[在线访问](https://wangc1993.github.io/game-2048/web/view/home.html)
 
 #### 游戏主要文件
 
